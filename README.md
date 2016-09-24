@@ -1,0 +1,1 @@
+# generic-sequelize-errors

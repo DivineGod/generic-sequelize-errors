@@ -1,0 +1,29 @@
+{
+  "name": "generic-sequelize-errors",
+  "version": "1.0.0",
+  "description": "Map Sequelize errors to errors provided by generic-errors",
+  "main": "index.js",
+  "scripts": {
+    "test": "node tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/divinegod/generic-sequelize-errors.git"
+  },
+  "keywords": [
+    "sequelize",
+    "sql",
+    "orm",
+    "error",
+    "errors",
+    "errorcode"
+  ],
+  "author": "Anders Rasmussen <divinegod@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "generic-errors": "^2.0.2"
+  },
+  "devDependencies": {
+    "tape": "^4.6.0"
+  }
+}
