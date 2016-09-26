@@ -49,6 +49,9 @@ var InstanceError = function (message) {
     this.message = message;
 };
 util.inherits(BaseError, Error);
+BaseError.prototype.get = function (key) {
+    return this.fields[key];
+};
 util.inherits(ValidationError, BaseError);
 util.inherits(DatabaseError, BaseError);
 util.inherits(TimeoutError, BaseError);
@@ -83,14 +86,31 @@ var testSequelize = {
 };
 
 test('module loading', function (t) {
-    t.plan(4);
+    t.plan(5);
 
     var boundGeneric = genericSequeliseError(testSequelize);
+
+    var testError = new BaseError('some message');
 
     t.equal(typeof genericSequeliseError, 'function', 'module is a function');
     t.equal(genericSequeliseError.length, 2, 'takes two arguments');
     t.equal(typeof boundGeneric, 'function', 'bound convertion function');
     t.equal(boundGeneric.length, 1, 'takes 1 argument');
+    t.deepEqual(
+        boundGeneric(testError),
+        genericSequeliseError(testSequelize, testError),
+        'bound and unbound invocation are equal'
+    );
+});
+
+test('return error unchanged if not a Sequelize error object', function (t) {
+    t.plan(1);
+
+    var boundGeneric = genericSequeliseError(testSequelize);
+
+    var testError = new Error('error');
+
+    t.equal(boundGeneric(testError), testError, 'unaltered error');
 });
 
 test('converts sequelize error type to generic-error type', function (t) {
@@ -103,5 +123,17 @@ test('converts sequelize error type to generic-error type', function (t) {
     var boundGeneric = genericSequeliseError(testSequelize);
     t.ok(boundGeneric(testError), 'ok result');
     t.ok(boundGeneric(testError) instanceof expectedType, 'ok prototype');
+    t.deepEqual(boundGeneric(testError), expectedError, 'correct error');
+});
+
+test('Validation error converts to an Unprocessable, with individual field errors', function (t) {
+    t.plan(1);
+
+    var boundGeneric = genericSequeliseError(testSequelize);
+
+    var testError = new ValidationError();
+    testError.fields = { what: [{ message: 'what' }] };
+    var expectedError = new errors.Unprocessable({ fields: { what: ['what'] } });
+
     t.deepEqual(boundGeneric(testError), expectedError, 'correct error');
 });
