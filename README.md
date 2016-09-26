@@ -8,7 +8,7 @@ BYO Sequelize version to match against.
 var Sequelize = require('sequelize');
 var genericSequelizeErrors = require('generic-sequelize-errors');
 
-var sequelizeError = new Sequelize.ValidationError('some error that's been returned from Sequelize');
+var sequelizeError = new Sequelize.ValidationError('some error that\'s been returned from Sequelize');
 // Either use with two arguments, the Sequelize version your project needs and the error
 var genericErrorTwoArgs = genericSequelizeErrors(Sequelize, sequelizeError);
 // Or by only supplying the Sequelize object a bound function is returned
