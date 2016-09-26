@@ -68,7 +68,7 @@ util.inherits(ConnectionTimedOutError, ConnectionError);
 util.inherits(InstanceError, BaseError);
 
 var testSequelize = {
-    BaseError,
+    Error: BaseError, // For some reason Sequelize has chosen not to document this name change
     ValidationError,
     DatabaseError,
     TimeoutError,
@@ -90,7 +90,7 @@ test('module loading', function (t) {
 
     var boundGeneric = genericSequeliseError(testSequelize);
 
-    var testError = new BaseError('some message');
+    var testError = new testSequelize.Error('some message');
 
     t.equal(typeof genericSequeliseError, 'function', 'module is a function');
     t.equal(genericSequeliseError.length, 2, 'takes two arguments');
@@ -116,7 +116,7 @@ test('return error unchanged if not a Sequelize error object', function (t) {
 test('converts sequelize error type to generic-error type', function (t) {
     t.plan(3);
 
-    var testError = new testSequelize.BaseError('some message');
+    var testError = new testSequelize.Error('some message');
     var expectedError = new errors.BaseError({ message: 'some message' });
     var expectedType = errors.BaseError;
 

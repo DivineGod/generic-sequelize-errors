@@ -5,7 +5,7 @@ function convert(Sequelize, error) {
     if (error instanceof Sequelize.ValidationError) {
         fields = Object
             .keys(error.fields)
-            .reduce(function (acc, key, index, arr) {
+            .reduce(function (acc, key) {
                 acc[key] = error.get(key).map((fieldError) => fieldError.message);
                 return acc;
             }, {});
@@ -13,7 +13,7 @@ function convert(Sequelize, error) {
             fields,
         });
     }
-    if (error instanceof Sequelize.BaseError) {
+    if (error instanceof Sequelize.Error) {
         return new errors.BaseError({ message: error.message });
     }
     return error;

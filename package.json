@@ -1,6 +1,6 @@
 {
   "name": "generic-sequelize-errors",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Map Sequelize errors to errors provided by generic-errors",
   "main": "index.js",
   "scripts": {
